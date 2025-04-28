@@ -1,0 +1,164 @@
+{% extends "hotel/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container my-5">
+  
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-8" style="height:60vh ;width:100 ;overflow:hidden">
+                <img style="height:60vh; width:90%; object-fit: cover;" src="{{ hotel.image.url }}"
+                    class="img-fluid rounded-4 shadow" alt="{{ hotel.name }}">
+            </div>
+            <div class="col-md-4">
+                <h1 class="mb-3">{{ hotel.name }}</h1>
+                <p class="text-muted">{{ hotel.location }}</p>
+                <p>{{ hotel.description }}</p>
+    
+                <h5>Contact:</h5>
+                <p>{{ hotel.contact_number }}</p>
+    
+                <h5>Hotel Rating:</h5>
+                <p>
+                    {% with rating=hotel.rating %}
+                    {% for i in "12345" %}
+                    {% if rating >= forloop.counter %}
+                    <i class="fas fa-star text-warning"></i>
+                    {% elif rating >= forloop.counter0|add:"0.5" %}
+                    <i class="fas fa-star-half-alt text-warning"></i>
+                    {% else %}
+                    <i class="far fa-star text-warning"></i>
+                    {% endif %}
+                    {% endfor %}
+                    {% endwith %}
+                </p>
+    
+    
+            </div>
+        </div>
+        <br>
+        <br>
+  <!-- Search Form -->
+  <div class="search-form mb-5">
+    <form method="get">
+      <div class="row">
+        
+        <!-- Room Type -->
+        <div class="col-md-4 mb-3">
+          <label for="room_type" class="form-label">Room Type</label>
+          <select id="room_type" name="room_type" class="form-select">
+            <option value="">All Types</option>
+            <option value="Single" {% if selected_room_type == 'Single' %}selected{% endif %}>Single</option>
+            <option value="Double" {% if selected_room_type == 'Double' %}selected{% endif %}>Double</option>
+            <option value="Suite" {% if selected_room_type == 'Suite' %}selected{% endif %}>Suite</option>
+          </select>
+        </div>
+
+        <!-- Availability -->
+        <div class="col-md-4 mb-3">
+          <label for="availability" class="form-label">Availability</label>
+          <select id="availability" name="availability" class="form-select">
+            <option value="">All</option>
+            <option value="available" {% if selected_availability == 'available' %}selected{% endif %}>Available</option>
+            <option value="unavailable" {% if selected_availability == 'unavailable' %}selected{% endif %}>Not Available</option>
+          </select>
+        </div>
+
+        <!-- Search Button -->
+        <div class="col-md-4 d-flex align-items-end mb-3">
+          <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Reset Filters -->
+    <div class="text-end">
+      <a href="{% url 'hotel_detail' hotel.id %}" class="btn btn-secondary btn-sm mt-2">Reset Filters</a>
+    </div>
+  </div>
+
+  <!-- Rooms Section -->
+  {% if selected_room_type %}
+    <!-- User selected a specific room type: show rooms directly -->
+    <div class="row g-4">
+      {% for room in rooms %}
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
+            
+            {% if room.room_image %}
+              <img src="{{ room.room_image.url }}" class="card-img-top" alt="Room {{ room.room_number }}" style="height: 250px; object-fit: cover;">
+            {% else %}
+              <img src="{% static 'images/default_room.jpg' %}" class="card-img-top" alt="No Image" style="height: 250px; object-fit: cover;">
+            {% endif %}
+
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ room.room_type }} Room - {{ room.room_number }}</h5>
+              <p class="card-text"><strong>Price:</strong> ${{ room.price_per_night }} per night</p>
+              <p class="card-text"><strong>Amenities:</strong> {{ room.amenities }}</p>
+              <p class="card-text">
+                <strong>Status:</strong>
+                {% if room.availability %}
+                  <span class="badge bg-success">Available</span>
+                {% else %}
+                  <span class="badge bg-danger">Not Available</span>
+                {% endif %}
+              </p>
+
+              <div class="mt-auto">
+                <a href="#" class="btn btn-outline-primary w-100 rounded-pill">View Room</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12 text-center">
+          <p class="text-muted">No rooms found matching your search.</p>
+        </div>
+      {% endfor %}
+    </div>
+
+  {% else %}
+    <!-- No specific room type selected: group rooms by type -->
+    {% for room_type, grouped_rooms in grouped_rooms_by_type.items %}
+      <h3 class="mt-5 mb-3">{{ room_type }} Rooms</h3>
+      <div class="row g-4">
+        {% for room in grouped_rooms %}
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
+              
+              {% if room.room_image %}
+                <img src="{{ room.room_image.url }}" class="card-img-top" alt="Room {{ room.room_number }}" style="height: 250px; object-fit: cover;">
+              {% else %}
+                <img src="{% static 'images/default_room.jpg' %}" class="card-img-top" alt="No Image" style="height: 250px; object-fit: cover;">
+              {% endif %}
+
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ room.room_type }} Room - {{ room.room_number }}</h5>
+                <p class="card-text"><strong>Price:</strong> ${{ room.price_per_night }} per night</p>
+                <p class="card-text"><strong>Amenities:</strong> {{ room.amenities }}</p>
+                <p class="card-text">
+                  <strong>Status:</strong>
+                  {% if room.availability %}
+                    <span class="badge bg-success">Available</span>
+                  {% else %}
+                    <span class="badge bg-danger">Not Available</span>
+                  {% endif %}
+                </p>
+
+                <div class="mt-auto">
+                  <a href="#" class="btn btn-outline-primary w-100 rounded-pill">View Room</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+</div>
+
+{% endblock %}

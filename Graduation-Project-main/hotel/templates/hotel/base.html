@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <title>{% block title %}{% endblock %}</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+      body {
+        padding-bottom: 100px; /* Adjust this value to match the height of the footer */
+      }
+        .custom-navbar {
+          padding: 1.5rem 1rem; /* Increase padding */
+          font-size: 1.5rem; /* Increase font size */
+        }
+       
+        .carousel-inner img {
+        height: 84vh; /* Adjust height */
+        object-fit: cover; /* Keep image aspect ratio nicely */
+        }
+
+    </style>
+</head>
+  <body class="border-0 border-0">
+    <!-- Example Code Start-->
+    <body class="border-0">
+
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(90deg, #0062E6, #33AEFF); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+          <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="{% url 'index' %}" style="font-size: 1.8rem;">
+              Star Hotels
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        
+                <li class="nav-item">
+                  <a class="nav-link active fw-semibold" aria-current="page" href="{% url 'index' %}">Home</a>
+                </li>
+        
+                <li class="nav-item">
+                  <a class="nav-link fw-semibold" href="#">About Us</a>
+                </li>
+        
+                <li class="nav-item">
+                  <a class="nav-link fw-semibold" href="#">Services</a>
+                </li>
+        
+                <li class="nav-item">
+                  <a class="nav-link fw-semibold" href="#">Contact</a>
+                </li>
+                {% if not user.is_authenticated %}
+                  <li class="nav-item ms-3">
+                    <a class="btn btn-light rounded-pill px-4" href="{% url 'login' %}" style="color: #0062E6; font-weight: 600;">
+                      Login
+                    </a>
+                  </li>
+                {% else %}
+                  <li class="nav-item ms-3">
+                    <a class="btn btn-light rounded-pill px-4" href="{%url 'logout' %}" style="color: #0062E6; font-weight: 600;">
+                      Logout
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <!-- Navbar End -->
+        {% block content %}
+
+        {% endblock %}
+    <!-- Footer -->
+    <!-- Bootstrap Icons CDN (عشان الأيقونات تشتغل) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<footer class="text-light py-3 fixed-bottom mt-5" style="background-color: #021a3d;">
+  <div class="container text-center">
+    <p class="mb-1">&copy; 2025 HotelBooking. All rights reserved.</p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="#" class="text-info fs-4" title="Facebook">
+        <i class="bi bi-facebook"></i>
+      </a>
+      <a href="#" class="text-info fs-4" title="Twitter">
+        <i class="bi bi-twitter"></i>
+      </a>
+      <a href="#" class="text-info fs-4" title="Instagram">
+        <i class="bi bi-instagram"></i>
+      </a>
+    </div>
+  </div>
+</footer>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+  </body>
+</html>
